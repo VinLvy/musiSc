@@ -12,9 +12,9 @@ def music_player_bot():
     # Lokasi file musik (pastikan file-file ini ada di direktori yang sama
     # atau berikan path absolutnya)
     music_files = {
-        "1": "music1.mp3",
-        "2": "music2.mp3",
-        "3": "music3.mp3"
+        "1": "Any Other Way.mp3",
+        "2": "Never Say Die.mp3",
+        "3": "A Moment Apart.mp3"
     }
 
     # Periksa apakah file musik ada
