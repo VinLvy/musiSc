@@ -1,6 +1,6 @@
 import pygame
 import os
-import time
+import time # Meskipun tidak digunakan secara langsung untuk fungsionalitas utama, tetap dipertahankan jika ada penambahan fitur lain.
 
 def music_player_bot():
     print("Halo! Saya adalah bot pemutar musik lokal Anda.")
@@ -26,7 +26,7 @@ def music_player_bot():
             print(f"Peringatan: File '{filename}' tidak ditemukan.")
 
     if not available_music:
-        print("Tidak ada file musik yang ditemukan. Pastikan Anda memiliki 'music1.mp3', 'music2.mp3', dll., di direktori yang sama.")
+        print("Tidak ada file musik yang ditemukan. Pastikan Anda memiliki 'Any Other Way.mp3', 'Never Say Die.mp3', dll., di direktori yang sama.")
         return # Keluar jika tidak ada musik
 
     while True:
@@ -34,7 +34,7 @@ def music_player_bot():
         for key, filename in available_music.items():
             print(f"{key}. {filename}")
         print("---------------------")
-        print("Ketik 'pilih [nomor]' untuk memutar musik (contoh: pilih 1)")
+        print("Cukup ketik **nomor** musik untuk memutar.")
         print("Ketik 'stop' untuk menghentikan musik")
         print("Ketik 'jeda' untuk menjeda musik")
         print("Ketik 'lanjut' untuk melanjutkan musik")
@@ -43,19 +43,25 @@ def music_player_bot():
 
         user_input = input("Anda: ").lower().strip()
 
-        if user_input.startswith("pilih "):
-            try:
-                choice = user_input.split(" ")[1]
-                if choice in available_music:
-                    file_to_play = available_music[choice]
-                    print(f"Memutar: {file_to_play}")
-                    pygame.mixer.music.load(file_to_play)
-                    pygame.mixer.music.play()
-                else:
-                    print("Nomor musik tidak valid. Silakan pilih dari daftar.")
-            except IndexError:
-                print("Format tidak benar. Gunakan 'pilih [nomor]'.")
-        elif user_input == "stop":
+        # Coba konversi input ke integer (untuk memilih musik)
+        try:
+            choice = str(int(user_input)) # Konversi ke int lalu kembali ke string untuk pencarian di dictionary
+            if choice in available_music:
+                file_to_play = available_music[choice]
+                print(f"Memutar: {file_to_play}")
+                pygame.mixer.music.load(file_to_play)
+                pygame.mixer.music.play()
+                continue # Lanjutkan ke iterasi berikutnya setelah memutar musik
+            else:
+                # Jika input adalah angka tapi bukan nomor musik yang tersedia
+                print("Nomor musik tidak valid. Silakan pilih dari daftar.")
+                continue
+        except ValueError:
+            # Jika input bukan angka, lanjutkan ke pengecekan perintah teks
+            pass
+
+        # Penanganan perintah teks
+        if user_input == "stop":
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.stop()
                 print("Musik dihentikan.")
@@ -68,20 +74,21 @@ def music_player_bot():
             else:
                 print("Tidak ada musik yang sedang diputar untuk dijeda.")
         elif user_input == "lanjut":
-            if not pygame.mixer.music.get_busy():
+            # Periksa apakah musik dijeda (tidak 'busy' tapi bisa dilanjutkan)
+            if pygame.mixer.music.get_pos() != -1 and not pygame.mixer.music.get_busy():
                 pygame.mixer.music.unpause()
                 print("Musik dilanjutkan.")
             else:
                 print("Musik sudah berjalan atau belum dijeda.")
         elif user_input == "daftar":
-            pass # Loop akan mencetak daftar lagi
+            pass # Loop akan mencetak daftar lagi secara otomatis
         elif user_input == "keluar":
             pygame.mixer.music.stop() # Hentikan musik sebelum keluar
             pygame.mixer.quit() # Hentikan mixer Pygame
             print("Bot: Sampai jumpa!")
             break
         else:
-            print("Perintah tidak dikenal. Silakan coba lagi.")
+            print("Perintah tidak dikenal. Silakan coba lagi atau ketik nomor musik.")
 
 if __name__ == "__main__":
     music_player_bot()
