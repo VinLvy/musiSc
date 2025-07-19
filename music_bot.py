@@ -1,23 +1,19 @@
 import pygame
 import os
-import time # Meskipun tidak digunakan secara langsung untuk fungsionalitas utama, tetap dipertahankan jika ada penambahan fitur lain.
+import time
 
 def music_player_bot():
     print("Halo! Saya adalah bot pemutar musik lokal Anda.")
     print("Saya bisa memutar musik dari file di komputer Anda.")
 
-    # Inisialisasi Pygame Mixer
     pygame.mixer.init()
 
-    # Lokasi file musik (pastikan file-file ini ada di direktori yang sama
-    # atau berikan path absolutnya)
     music_files = {
         "1": "Any Other Way.mp3",
         "2": "Never Say Die.mp3",
         "3": "A Moment Apart.mp3"
     }
 
-    # Periksa apakah file musik ada
     available_music = {}
     for key, filename in music_files.items():
         if os.path.exists(filename):
@@ -27,9 +23,10 @@ def music_player_bot():
 
     if not available_music:
         print("Tidak ada file musik yang ditemukan. Pastikan Anda memiliki 'Any Other Way.mp3', 'Never Say Die.mp3', dll., di direktori yang sama.")
-        return # Keluar jika tidak ada musik
+        return
 
     while True:
+        # Tampilan daftar musik dan instruksi selalu ditampilkan di awal setiap iterasi
         print("\n--- Pilihan Musik ---")
         for key, filename in available_music.items():
             print(f"{key}. {filename}")
@@ -38,24 +35,23 @@ def music_player_bot():
         print("Ketik 'stop' untuk menghentikan musik")
         print("Ketik 'jeda' untuk menjeda musik")
         print("Ketik 'lanjut' untuk melanjutkan musik")
-        print("Ketik 'daftar' untuk melihat daftar musik lagi")
+        print("Ketik 'daftar' untuk melihat daftar ini lagi") # Perbarui instruksi
         print("Ketik 'keluar' untuk mengakhiri bot")
 
         user_input = input("Anda: ").lower().strip()
 
         # Coba konversi input ke integer (untuk memilih musik)
         try:
-            choice = str(int(user_input)) # Konversi ke int lalu kembali ke string untuk pencarian di dictionary
+            choice = str(int(user_input))
             if choice in available_music:
                 file_to_play = available_music[choice]
                 print(f"Memutar: {file_to_play}")
                 pygame.mixer.music.load(file_to_play)
                 pygame.mixer.music.play()
-                continue # Lanjutkan ke iterasi berikutnya setelah memutar musik
+                # Tidak perlu continue di sini karena loop akan otomatis mencetak ulang di awal
             else:
-                # Jika input adalah angka tapi bukan nomor musik yang tersedia
                 print("Nomor musik tidak valid. Silakan pilih dari daftar.")
-                continue
+            continue # Penting: Langsung kembali ke awal loop setelah memproses pilihan angka
         except ValueError:
             # Jika input bukan angka, lanjutkan ke pengecekan perintah teks
             pass
@@ -74,21 +70,26 @@ def music_player_bot():
             else:
                 print("Tidak ada musik yang sedang diputar untuk dijeda.")
         elif user_input == "lanjut":
-            # Periksa apakah musik dijeda (tidak 'busy' tapi bisa dilanjutkan)
             if pygame.mixer.music.get_pos() != -1 and not pygame.mixer.music.get_busy():
                 pygame.mixer.music.unpause()
                 print("Musik dilanjutkan.")
             else:
                 print("Musik sudah berjalan atau belum dijeda.")
         elif user_input == "daftar":
-            pass # Loop akan mencetak daftar lagi secara otomatis
+            # Tidak perlu tindakan khusus karena loop akan mencetak ulang
+            print("Mencetak daftar ulang...")
         elif user_input == "keluar":
-            pygame.mixer.music.stop() # Hentikan musik sebelum keluar
-            pygame.mixer.quit() # Hentikan mixer Pygame
+            pygame.mixer.music.stop()
+            pygame.mixer.quit()
             print("Bot: Sampai jumpa!")
             break
         else:
             print("Perintah tidak dikenal. Silakan coba lagi atau ketik nomor musik.")
+        
+        # Penjelasan mengapa tidak ada 'continue' di sini:
+        # Setelah setiap perintah teks selesai diproses, eksekusi secara alami
+        # akan mencapai akhir loop 'while True' dan kemudian kembali ke awal loop,
+        # yang akan mencetak ulang tampilan.
 
 if __name__ == "__main__":
     music_player_bot()
