@@ -2,6 +2,10 @@ import pygame
 import os
 import time
 
+def clear_screen():
+    """Membersihkan layar konsol."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def music_player_bot():
     print("Halo! Saya adalah bot pemutar musik lokal Anda.")
     print("Saya bisa memutar musik dari file di komputer Anda.")
@@ -20,38 +24,61 @@ def music_player_bot():
             available_music[key] = filename
         else:
             print(f"Peringatan: File '{filename}' tidak ditemukan.")
+            time.sleep(1) # Beri waktu pengguna membaca peringatan
 
     if not available_music:
         print("Tidak ada file musik yang ditemukan. Pastikan Anda memiliki 'Any Other Way.mp3', 'Never Say Die.mp3', dll., di direktori yang sama.")
         return
 
-    while True:
-        # Tampilan daftar musik dan instruksi selalu ditampilkan di awal setiap iterasi
-        print("\n--- Pilihan Musik ---")
-        for key, filename in available_music.items():
-            print(f"{key}. {filename}")
-        print("---------------------")
-        print("Cukup ketik **nomor** musik untuk memutar.")
-        print("Ketik 'stop' untuk menghentikan musik")
-        print("Ketik 'jeda' untuk menjeda musik")
-        print("Ketik 'lanjut' untuk melanjutkan musik")
-        print("Ketik 'daftar' untuk melihat daftar ini lagi") # Perbarui instruksi
-        print("Ketik 'keluar' untuk mengakhiri bot")
+    current_playing_info = "Tidak ada musik yang sedang diputar."
+    current_song_name = None # Menyimpan nama file musik yang sedang diputar
 
-        user_input = input("Anda: ").lower().strip()
+    # Tampilan awal bot
+    clear_screen()
+    print("Halo! Saya adalah bot pemutar musik lokal Anda.")
+    print("Saya bisa memutar musik dari file di komputer Anda.")
+    print("\n--- Pilihan Musik ---")
+    for key, filename in available_music.items():
+        print(f"{key}. {filename}")
+    print("---------------------")
+    print("\n" + current_playing_info) # Tampilkan status awal
+    print("Ketik **nomor** musik untuk memutar.")
+    print("Ketik 'stop' untuk menghentikan musik")
+    print("Ketik 'jeda' untuk menjeda musik")
+    print("Ketik 'lanjut' untuk melanjutkan musik")
+    print("Ketik 'daftar' untuk menampilkan daftar musik ini lagi")
+    print("Ketik 'keluar' untuk mengakhiri bot")
+
+    while True:
+        user_input = input("\nAnda: ").lower().strip() # Tambahkan baris kosong agar input tidak menempel
 
         # Coba konversi input ke integer (untuk memilih musik)
         try:
             choice = str(int(user_input))
             if choice in available_music:
                 file_to_play = available_music[choice]
-                print(f"Memutar: {file_to_play}")
+                current_song_name = file_to_play # Update nama lagu yang sedang diputar
                 pygame.mixer.music.load(file_to_play)
                 pygame.mixer.music.play()
-                # Tidak perlu continue di sini karena loop akan otomatis mencetak ulang di awal
+                current_playing_info = f"Memutar: {current_song_name}"
             else:
-                print("Nomor musik tidak valid. Silakan pilih dari daftar.")
-            continue # Penting: Langsung kembali ke awal loop setelah memproses pilihan angka
+                current_playing_info = f"Nomor musik tidak valid. Silakan pilih dari daftar.\n{current_playing_info}"
+            
+            # Setelah memproses input, bersihkan layar dan cetak ulang status
+            clear_screen()
+            print("\n--- Pilihan Musik ---")
+            for key, filename in available_music.items():
+                print(f"{key}. {filename}")
+            print("---------------------")
+            print("\n" + current_playing_info)
+            print("Ketik **nomor** musik untuk memutar.")
+            print("Ketik 'stop' untuk menghentikan musik")
+            print("Ketik 'jeda' untuk menjeda musik")
+            print("Ketik 'lanjut' untuk melanjutkan musik")
+            print("Ketik 'daftar' untuk menampilkan daftar musik ini lagi")
+            print("Ketik 'keluar' untuk mengakhiri bot")
+            continue # Kembali ke awal loop untuk input berikutnya
+
         except ValueError:
             # Jika input bukan angka, lanjutkan ke pengecekan perintah teks
             pass
@@ -60,36 +87,49 @@ def music_player_bot():
         if user_input == "stop":
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.stop()
-                print("Musik dihentikan.")
+                current_playing_info = "Musik dihentikan."
+                current_song_name = None
             else:
-                print("Tidak ada musik yang sedang diputar.")
+                current_playing_info = "Tidak ada musik yang sedang diputar."
         elif user_input == "jeda":
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.pause()
-                print("Musik dijeda.")
+                current_playing_info = f"Musik dijeda: {current_song_name if current_song_name else 'Tidak Diketahui'}"
             else:
-                print("Tidak ada musik yang sedang diputar untuk dijeda.")
+                current_playing_info = "Tidak ada musik yang sedang diputar untuk dijeda."
         elif user_input == "lanjut":
             if pygame.mixer.music.get_pos() != -1 and not pygame.mixer.music.get_busy():
                 pygame.mixer.music.unpause()
-                print("Musik dilanjutkan.")
+                current_playing_info = f"Melanjutkan: {current_song_name if current_song_name else 'Tidak Diketahui'}"
             else:
-                print("Musik sudah berjalan atau belum dijeda.")
+                current_playing_info = "Musik sudah berjalan atau belum dijeda."
         elif user_input == "daftar":
-            # Tidak perlu tindakan khusus karena loop akan mencetak ulang
-            print("Mencetak daftar ulang...")
+            # Perintah "daftar" akan mencetak ulang seluruh tampilan,
+            # sehingga mirip dengan cara kerja sebelumnya tetapi lebih terkontrol.
+            current_playing_info = "Daftar musik ditampilkan." # Bisa tambahkan pesan ini
+            # Tidak perlu tindakan khusus karena akan dicetak ulang di bawah
         elif user_input == "keluar":
             pygame.mixer.music.stop()
             pygame.mixer.quit()
+            clear_screen() # Bersihkan layar terakhir kali
             print("Bot: Sampai jumpa!")
             break
         else:
-            print("Perintah tidak dikenal. Silakan coba lagi atau ketik nomor musik.")
+            current_playing_info = f"Perintah tidak dikenal. Silakan coba lagi atau ketik nomor musik.\n{current_playing_info}"
         
-        # Penjelasan mengapa tidak ada 'continue' di sini:
-        # Setelah setiap perintah teks selesai diproses, eksekusi secara alami
-        # akan mencapai akhir loop 'while True' dan kemudian kembali ke awal loop,
-        # yang akan mencetak ulang tampilan.
+        # Bersihkan layar dan cetak ulang tampilan utama setelah setiap perintah teks
+        clear_screen()
+        print("\n--- Pilihan Musik ---")
+        for key, filename in available_music.items():
+            print(f"{key}. {filename}")
+        print("---------------------")
+        print("\n" + current_playing_info)
+        print("Ketik **nomor** musik untuk memutar.")
+        print("Ketik 'stop' untuk menghentikan musik")
+        print("Ketik 'jeda' untuk menjeda musik")
+        print("Ketik 'lanjut' untuk melanjutkan musik")
+        print("Ketik 'daftar' untuk menampilkan daftar musik ini lagi")
+        print("Ketik 'keluar' untuk mengakhiri bot")
 
 if __name__ == "__main__":
     music_player_bot()
