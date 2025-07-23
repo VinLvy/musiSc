@@ -41,13 +41,14 @@ def music_player_bot():
     for key, filename in available_music.items():
         print(f"{key}. {filename}")
     print("-----------------------")
-    print("\n" + current_playing_info) # Display initial status
     print("Type the **number** of the music to play.")
     print("Type 'stop' to stop the music")
     print("Type 'pause' to pause the music")
     print("Type 'resume' to resume the music")
     print("Type 'list' to show this music list again")
     print("Type 'exit' to quit the bot")
+
+    print("\n" + current_playing_info) # Display initial status
 
     while True:
         user_input = input("\nYou: ").lower().strip() # Add a blank line so input doesn't stick
@@ -70,13 +71,14 @@ def music_player_bot():
             for key, filename in available_music.items():
                 print(f"{key}. {filename}")
             print("-----------------------")
-            print("\n" + current_playing_info)
             print("Type the **number** of the music to play.")
             print("Type 'stop' to stop the music")
             print("Type 'pause' to pause the music")
             print("Type 'resume' to resume the music")
             print("Type 'list' to show this music list again")
             print("Type 'exit' to quit the bot")
+
+            print("\n" + current_playing_info)
             continue # Go back to the beginning of the loop for the next input
 
         except ValueError:
@@ -122,13 +124,14 @@ def music_player_bot():
         for key, filename in available_music.items():
             print(f"{key}. {filename}")
         print("-----------------------")
-        print("\n" + current_playing_info)
         print("Type the **number** of the music to play.")
         print("Type 'stop' to stop the music")
         print("Type 'pause' to pause the music")
         print("Type 'resume' to resume the music")
         print("Type 'list' to show this music list again")
         print("Type 'exit' to quit the bot")
+
+        print("\n" + current_playing_info)
 
 if __name__ == "__main__":
     music_player_bot()
