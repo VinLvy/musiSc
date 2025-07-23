@@ -45,7 +45,7 @@ def music_player_bot():
     print("Type 'stop' to stop the music")
     print("Type 'pause' to pause the music")
     print("Type 'resume' to resume the music")
-    print("Type 'list' to show this music list again")
+    # print("Type 'list' to show this music list again")
     print("Type 'exit' to quit the bot")
 
     print("\n" + current_playing_info) # Display initial status
@@ -75,7 +75,7 @@ def music_player_bot():
             print("Type 'stop' to stop the music")
             print("Type 'pause' to pause the music")
             print("Type 'resume' to resume the music")
-            print("Type 'list' to show this music list again")
+            # print("Type 'list' to show this music list again")
             print("Type 'exit' to quit the bot")
 
             print("\n" + current_playing_info)
@@ -128,7 +128,7 @@ def music_player_bot():
         print("Type 'stop' to stop the music")
         print("Type 'pause' to pause the music")
         print("Type 'resume' to resume the music")
-        print("Type 'list' to show this music list again")
+        # print("Type 'list' to show this music list again")
         print("Type 'exit' to quit the bot")
 
         print("\n" + current_playing_info)
