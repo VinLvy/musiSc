@@ -12,10 +12,16 @@ def music_player_bot():
 
     pygame.mixer.init()
 
+    music_folder = "music_files" 
+
+    if not os.path.exists(music_folder):
+        print(f"Error: Music folder '{music_folder}' not found. Please create it and put your music files inside.")
+        return
+
     music_files = {
-        "1": "Any Other Way.mp3",
-        "2": "Never Say Die.mp3",
-        "3": "A Moment Apart.mp3"
+        "1": os.path.join(music_folder, "Any Other Way.mp3"),
+        "2": os.path.join(music_folder, "Never Say Die.mp3"),
+        "3": os.path.join(music_folder, "A Moment Apart.mp3")
     }
 
     available_music = {}
