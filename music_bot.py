@@ -3,12 +3,12 @@ import os
 import time
 
 def clear_screen():
-    """Membersihkan layar konsol."""
+    """Clears the console screen."""
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def music_player_bot():
-    print("Halo! Saya adalah bot pemutar musik lokal Anda.")
-    print("Saya bisa memutar musik dari file di komputer Anda.")
+    print("Hello! I am your local music player bot.")
+    print("I can play music files from your computer.")
 
     pygame.mixer.init()
 
@@ -23,113 +23,112 @@ def music_player_bot():
         if os.path.exists(filename):
             available_music[key] = filename
         else:
-            print(f"Peringatan: File '{filename}' tidak ditemukan.")
-            time.sleep(1) # Beri waktu pengguna membaca peringatan
+            print(f"Warning: File '{filename}' not found.")
+            time.sleep(1) # Give the user time to read the warning
 
     if not available_music:
-        print("Tidak ada file musik yang ditemukan. Pastikan Anda memiliki 'Any Other Way.mp3', 'Never Say Die.mp3', dll., di direktori yang sama.")
+        print("No music files found. Please ensure you have 'Any Other Way.mp3', 'Never Say Die.mp3', etc., in the same directory.")
         return
 
-    current_playing_info = "Tidak ada musik yang sedang diputar."
-    current_song_name = None # Menyimpan nama file musik yang sedang diputar
+    current_playing_info = "No music is currently playing."
+    current_song_name = None # Stores the name of the currently playing music file
 
-    # Tampilan awal bot
+    # Initial bot display
     clear_screen()
-    print("Halo! Saya adalah bot pemutar musik lokal Anda.")
-    print("Saya bisa memutar musik dari file di komputer Anda.")
-    print("\n--- Pilihan Musik ---")
+    print("Hello! I am your local music player bot.")
+    print("I can play music files from your computer.")
+    print("\n--- Music Selection ---")
     for key, filename in available_music.items():
         print(f"{key}. {filename}")
-    print("---------------------")
-    print("\n" + current_playing_info) # Tampilkan status awal
-    print("Ketik **nomor** musik untuk memutar.")
-    print("Ketik 'stop' untuk menghentikan musik")
-    print("Ketik 'jeda' untuk menjeda musik")
-    print("Ketik 'lanjut' untuk melanjutkan musik")
-    print("Ketik 'daftar' untuk menampilkan daftar musik ini lagi")
-    print("Ketik 'keluar' untuk mengakhiri bot")
+    print("-----------------------")
+    print("\n" + current_playing_info) # Display initial status
+    print("Type the **number** of the music to play.")
+    print("Type 'stop' to stop the music")
+    print("Type 'pause' to pause the music")
+    print("Type 'resume' to resume the music")
+    print("Type 'list' to show this music list again")
+    print("Type 'exit' to quit the bot")
 
     while True:
-        user_input = input("\nAnda: ").lower().strip() # Tambahkan baris kosong agar input tidak menempel
+        user_input = input("\nYou: ").lower().strip() # Add a blank line so input doesn't stick
 
-        # Coba konversi input ke integer (untuk memilih musik)
+        # Try to convert input to an integer (for selecting music)
         try:
             choice = str(int(user_input))
             if choice in available_music:
                 file_to_play = available_music[choice]
-                current_song_name = file_to_play # Update nama lagu yang sedang diputar
+                current_song_name = file_to_play # Update the name of the playing song
                 pygame.mixer.music.load(file_to_play)
                 pygame.mixer.music.play()
-                current_playing_info = f"Memutar: {current_song_name}"
+                current_playing_info = f"Playing: {current_song_name}"
             else:
-                current_playing_info = f"Nomor musik tidak valid. Silakan pilih dari daftar.\n{current_playing_info}"
+                current_playing_info = f"Invalid music number. Please select from the list.\n{current_playing_info}"
             
-            # Setelah memproses input, bersihkan layar dan cetak ulang status
+            # After processing input, clear the screen and reprint the status
             clear_screen()
-            print("\n--- Pilihan Musik ---")
+            print("\n--- Music Selection ---")
             for key, filename in available_music.items():
                 print(f"{key}. {filename}")
-            print("---------------------")
+            print("-----------------------")
             print("\n" + current_playing_info)
-            print("Ketik **nomor** musik untuk memutar.")
-            print("Ketik 'stop' untuk menghentikan musik")
-            print("Ketik 'jeda' untuk menjeda musik")
-            print("Ketik 'lanjut' untuk melanjutkan musik")
-            print("Ketik 'daftar' untuk menampilkan daftar musik ini lagi")
-            print("Ketik 'keluar' untuk mengakhiri bot")
-            continue # Kembali ke awal loop untuk input berikutnya
+            print("Type the **number** of the music to play.")
+            print("Type 'stop' to stop the music")
+            print("Type 'pause' to pause the music")
+            print("Type 'resume' to resume the music")
+            print("Type 'list' to show this music list again")
+            print("Type 'exit' to quit the bot")
+            continue # Go back to the beginning of the loop for the next input
 
         except ValueError:
-            # Jika input bukan angka, lanjutkan ke pengecekan perintah teks
+            # If the input is not a number, proceed to check for text commands
             pass
 
-        # Penanganan perintah teks
+        # Handle text commands
         if user_input == "stop":
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.stop()
-                current_playing_info = "Musik dihentikan."
+                current_playing_info = "Music stopped."
                 current_song_name = None
             else:
-                current_playing_info = "Tidak ada musik yang sedang diputar."
-        elif user_input == "jeda":
+                current_playing_info = "No music is currently playing."
+        elif user_input == "pause":
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.pause()
-                current_playing_info = f"Musik dijeda: {current_song_name if current_song_name else 'Tidak Diketahui'}"
+                current_playing_info = f"Music paused: {current_song_name if current_song_name else 'Unknown'}"
             else:
-                current_playing_info = "Tidak ada musik yang sedang diputar untuk dijeda."
-        elif user_input == "lanjut":
+                current_playing_info = "No music is currently playing to pause."
+        elif user_input == "resume":
             if pygame.mixer.music.get_pos() != -1 and not pygame.mixer.music.get_busy():
                 pygame.mixer.music.unpause()
-                current_playing_info = f"Melanjutkan: {current_song_name if current_song_name else 'Tidak Diketahui'}"
+                current_playing_info = f"Resuming: {current_song_name if current_song_name else 'Unknown'}"
             else:
-                current_playing_info = "Musik sudah berjalan atau belum dijeda."
-        elif user_input == "daftar":
-            # Perintah "daftar" akan mencetak ulang seluruh tampilan,
-            # sehingga mirip dengan cara kerja sebelumnya tetapi lebih terkontrol.
-            current_playing_info = "Daftar musik ditampilkan." # Bisa tambahkan pesan ini
-            # Tidak perlu tindakan khusus karena akan dicetak ulang di bawah
-        elif user_input == "keluar":
+                current_playing_info = "Music is already playing or not paused."
+        elif user_input == "list":
+            # The "list" command will just trigger a screen refresh,
+            # as the entire display is reprinted below.
+            current_playing_info = "Music list displayed." # You can add this message
+        elif user_input == "exit":
             pygame.mixer.music.stop()
             pygame.mixer.quit()
-            clear_screen() # Bersihkan layar terakhir kali
-            print("Bot: Sampai jumpa!")
+            clear_screen() # Clear the screen one last time
+            print("Bot: Goodbye!")
             break
         else:
-            current_playing_info = f"Perintah tidak dikenal. Silakan coba lagi atau ketik nomor musik.\n{current_playing_info}"
+            current_playing_info = f"Unknown command. Please try again or type a music number.\n{current_playing_info}"
         
-        # Bersihkan layar dan cetak ulang tampilan utama setelah setiap perintah teks
+        # Clear the screen and reprint the main display after any text command
         clear_screen()
-        print("\n--- Pilihan Musik ---")
+        print("\n--- Music Selection ---")
         for key, filename in available_music.items():
             print(f"{key}. {filename}")
-        print("---------------------")
+        print("-----------------------")
         print("\n" + current_playing_info)
-        print("Ketik **nomor** musik untuk memutar.")
-        print("Ketik 'stop' untuk menghentikan musik")
-        print("Ketik 'jeda' untuk menjeda musik")
-        print("Ketik 'lanjut' untuk melanjutkan musik")
-        print("Ketik 'daftar' untuk menampilkan daftar musik ini lagi")
-        print("Ketik 'keluar' untuk mengakhiri bot")
+        print("Type the **number** of the music to play.")
+        print("Type 'stop' to stop the music")
+        print("Type 'pause' to pause the music")
+        print("Type 'resume' to resume the music")
+        print("Type 'list' to show this music list again")
+        print("Type 'exit' to quit the bot")
 
 if __name__ == "__main__":
     music_player_bot()
