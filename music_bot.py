@@ -107,13 +107,6 @@ def music_player_bot():
     while True:
         # Update elapsed time if music is playing
         elapsed_time_str = ""
-        if pygame.mixer.music.get_busy() and current_song_path:
-            elapsed_ms = pygame.mixer.music.get_pos()
-            elapsed_seconds = elapsed_ms / 1000
-            if current_song_duration:
-                elapsed_time_str = f" [{format_duration(elapsed_seconds)} / {format_duration(current_song_duration)}]"
-            else:
-                elapsed_time_str = f" [{format_duration(elapsed_seconds)}]"
 
         # Re-display current playing info with duration if available
         # Find the title of the currently playing song for display
