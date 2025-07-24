@@ -16,22 +16,16 @@ def get_audio_duration(file_path):
         if file_path.lower().endswith('.mp3'):
             audio = MP3(file_path)
             return audio.info.length
-        # You can add support for other formats here if needed
-        # elif file_path.lower().endswith('.wav'):
-        #     import wave
-        #     with wave.open(file_path, 'rb') as wf:
-        #         frames = wf.getnframes()
-        #         rate = wf.getframerate()
-        #         duration = frames / float(rate)
-        #         return duration
         else:
-            return None # Or raise an error for unsupported formats
+            return None
     except Exception as e:
         print(f"Error getting duration for {os.path.basename(file_path)}: {e}")
         return None
 
 def format_duration(seconds):
     """Formats duration from seconds into HH:MM:SS or MM:SS."""
+    if seconds is None: # Handle cases where duration might not be available
+        return "N/A"
     minutes, seconds = divmod(int(seconds), 60)
     hours, minutes = divmod(minutes, 60)
     if hours > 0:
@@ -60,7 +54,8 @@ def music_player_bot():
     available_music = {}
     for key, filename in music_files.items():
         if os.path.exists(filename):
-            available_music[key] = filename
+            duration = get_audio_duration(filename)
+            available_music[key] = {"path": filename, "duration": duration} # Store both path and duration
         else:
             print(f"Warning: File '{filename}' not found. Make sure it's in the '{music_folder}' directory.")
             time.sleep(1)
@@ -78,8 +73,10 @@ def music_player_bot():
     print("Hello! I am your local music player bot.")
     print("I can play music files from your computer.")
     print("\n--- Music Selection ---")
-    for key, filename in available_music.items():
-        print(f"{key}. {os.path.basename(filename)}")
+    for key, music_data in available_music.items(): # Iterate through the dictionary value (which is another dict)
+        song_name = os.path.basename(music_data["path"])
+        formatted_duration = format_duration(music_data["duration"])
+        print(f"{key}. {song_name} ({formatted_duration})") # Display name and duration
     print("-----------------------")
     print("Type the **number** of the music to play.")
     print("Type 'stop' to stop the music")
@@ -122,8 +119,10 @@ def music_player_bot():
         print("Hello! I am your local music player bot.")
         print("I can play music files from your computer.")
         print("\n--- Music Selection ---")
-        for key, filename in available_music.items():
-            print(f"{key}. {os.path.basename(filename)}")
+        for key, music_data in available_music.items(): # Re-iterate for display
+            song_name = os.path.basename(music_data["path"])
+            formatted_duration = format_duration(music_data["duration"])
+            print(f"{key}. {song_name} ({formatted_duration})") # Display name and duration
         print("-----------------------")
         print("Type the **number** of the music to play.")
         print("Type 'stop' to stop the music")
@@ -146,10 +145,10 @@ def music_player_bot():
         try:
             choice = str(int(user_input))
             if choice in available_music:
-                file_to_play = available_music[choice]
-                current_song_path = file_to_play # Store the full path
-                current_song_duration = get_audio_duration(file_to_play) # Get duration
-                pygame.mixer.music.load(file_to_play)
+                file_to_play_data = available_music[choice] # Get the dictionary for the chosen song
+                current_song_path = file_to_play_data["path"] # Get the path
+                current_song_duration = file_to_play_data["duration"] # Get the duration
+                pygame.mixer.music.load(current_song_path)
                 pygame.mixer.music.play(loops=-1)
                 is_playing_looped = True
                 current_playing_info = f"Playing (looping): {os.path.basename(current_song_path)}"
