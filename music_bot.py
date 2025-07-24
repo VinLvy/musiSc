@@ -171,16 +171,12 @@ def music_player_bot():
                 current_playing_info = "No music is currently playing."
         elif user_input == "pause":
             if pygame.mixer.music.get_busy():
-                current_song_display_name = os.path.basename(current_song_path) if current_song_path else 'Unknown'
-                pygame.mixer.music.pause()
-                current_playing_info = f"Music paused: {current_song_display_name}"
+                current_playing_info = f"Music paused: {current_display_title}" # Use current_display_title
             else:
                 current_playing_info = "No music is currently playing to pause."
         elif user_input == "resume":
             if pygame.mixer.music.get_pos() != -1 and not pygame.mixer.music.get_busy():
-                current_song_display_name = os.path.basename(current_song_path) if current_song_path else 'Unknown'
-                pygame.mixer.music.unpause()
-                current_playing_info = f"Resuming: {current_song_display_name}"
+                current_playing_info = f"Resuming: {current_display_title}" # Use current_display_title
             else:
                 current_playing_info = "Music is already playing or not paused."
         elif user_input == "exit":
