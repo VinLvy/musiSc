@@ -102,13 +102,13 @@ def music_player_bot():
             if current_song_path:
                 song_name = os.path.basename(current_song_path)
                 status_prefix = "Playing (looping):" if is_playing_looped else "Playing:"
-                current_playing_info_display = f"{status_prefix} {song_name}{elapsed_time_str}"
+                current_playing_info_display = f"{status_prefix} {song_name}"
             else:
                 current_playing_info_display = current_playing_info
         elif "Paused" in current_playing_info:
             if current_song_path:
                 song_name = os.path.basename(current_song_path)
-                current_playing_info_display = f"Music paused: {song_name}{elapsed_time_str}"
+                current_playing_info_display = f"Music paused: {song_name}"
             else:
                 current_playing_info_display = current_playing_info
         else:
