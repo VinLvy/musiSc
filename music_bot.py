@@ -1,7 +1,7 @@
 import pygame
 import os
 import time
-from mutagen.mp3 import MP3 # Import MP3 from mutagen
+from mutagen.mp3 import MP3
 
 def clear_screen():
     """Clears the console screen."""
@@ -19,7 +19,6 @@ def get_audio_duration(file_path):
         else:
             return None
     except Exception as e:
-        # print(f"Error getting duration for {os.path.basename(file_path)}: {e}") # Optional: uncomment for debugging
         return None
 
 def get_audio_title(file_path):
@@ -35,10 +34,9 @@ def get_audio_title(file_path):
             # If TIT2 tag is not present, it will default to the filename
             return audio.get('TIT2', [os.path.basename(file_path)])[0]
         else:
-            return os.path.basename(file_path) # Return filename for unsupported types
+            return os.path.basename(file_path)
     except Exception as e:
-        # print(f"Error getting title for {os.path.basename(file_path)}: {e}") # Optional: uncomment for debugging
-        return os.path.basename(file_path) # Fallback to filename if error occurs
+        return os.path.basename(file_path)
 
 def format_duration(seconds):
     """Formats duration from seconds into HH:MM:SS or MM:SS."""
@@ -94,7 +92,7 @@ def music_player_bot():
     print("\n--- Music Selection ---")
     for key, music_data in available_music.items():
         formatted_duration = format_duration(music_data["duration"])
-        print(f"{key}. {music_data['title']} ({formatted_duration})") # Display title and duration
+        print(f"{key}. {music_data['title']} ({formatted_duration})")
     print("-----------------------")
     print("Type the **number** of the music to play.")
     print("Type 'stop' to stop the music")
@@ -105,7 +103,6 @@ def music_player_bot():
     print("\n" + current_playing_info)
 
     while True:
-        # Update elapsed time if music is playing
         elapsed_time_str = ""
 
         # Re-display current playing info with duration if available
@@ -125,14 +122,13 @@ def music_player_bot():
         else:
             current_playing_info_display = current_playing_info
 
-
         clear_screen()
         print("Hello! I am your local music player bot.")
         print("I can play music files from your computer.")
         print("\n--- Music Selection ---")
         for key, music_data in available_music.items():
             formatted_duration = format_duration(music_data["duration"])
-            print(f"{key}. {music_data['title']} ({formatted_duration})") # Display title and duration
+            print(f"{key}. {music_data['title']} ({formatted_duration})")
         print("-----------------------")
         print("Type the **number** of the music to play.")
         print("Type 'stop' to stop the music")
@@ -154,7 +150,6 @@ def music_player_bot():
                     break
             current_playing_info = f"Re-looping: {relooping_title}"
 
-
         user_input = input("\nYou: ").lower().strip()
 
         try:
@@ -166,12 +161,10 @@ def music_player_bot():
                 pygame.mixer.music.load(current_song_path)
                 pygame.mixer.music.play(loops=-1)
                 is_playing_looped = True
-                current_playing_info = f"Playing (looping): {file_to_play_data['title']}" # Use the title here
+                current_playing_info = f"Playing (looping): {file_to_play_data['title']}"
             else:
                 current_playing_info = f"Invalid music number. Please select from the list.\n{current_playing_info}"
-
             continue
-
         except ValueError:
             pass
 
@@ -186,12 +179,14 @@ def music_player_bot():
                 current_playing_info = "No music is currently playing."
         elif user_input == "pause":
             if pygame.mixer.music.get_busy():
-                current_playing_info = f"Music paused: {current_display_title}" # Use current_display_title
+                pygame.mixer.music.pause()
+                current_playing_info = f"Music paused: {current_display_title}"
             else:
                 current_playing_info = "No music is currently playing to pause."
         elif user_input == "resume":
             if pygame.mixer.music.get_pos() != -1 and not pygame.mixer.music.get_busy():
-                current_playing_info = f"Resuming: {current_display_title}" # Use current_display_title
+                pygame.mixer.music.unpause()
+                current_playing_info = f"Resuming: {current_display_title}"
             else:
                 current_playing_info = "Music is already playing or not paused."
         elif user_input == "exit":
