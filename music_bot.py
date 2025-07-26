@@ -27,17 +27,14 @@ def get_audio_duration(file_path):
         return None
 
 def get_audio_title(file_path):
-    try:
-        if file_path.lower().endswith('.mp3'):
-            audio = MP3(file_path)
-            # 'TIT2' is the ID3 tag for the song title
-            # .get('TIT2', [default_value]) returns a list, so take the first element [0]
-            # If TIT2 tag is not present, it will default to the filename
-            return audio.get('TIT2', [os.path.basename(file_path)])[0]
-        else:
-            return os.path.basename(file_path)
-    except Exception as e:
-        return os.path.basename(file_path)
+    """
+    Gets the title of an audio file from its filename, removing the extension.
+    """
+    # Mengambil nama file dasar (contoh: "Song Title.mp3" menjadi "Song Title.mp3")
+    base_name = os.path.basename(file_path)
+    # Memisahkan nama file dan ekstensi (contoh: "Song Title.mp3" menjadi ("Song Title", ".mp3"))
+    title_without_extension, _ = os.path.splitext(base_name)
+    return title_without_extension
 
 def format_duration(seconds):
     if seconds is None:
