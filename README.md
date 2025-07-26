@@ -1,16 +1,22 @@
-# musiSc
+# MusiSc
 
-musiSc is a simple, console-based music player bot written in Python. It allows you to play local MP3 files directly from your terminal, offering basic controls like play, stop, pause, and resume. The bot provides a clean and interactive experience by dynamically updating its display.
+MusiSc is a simple graphical music player built with Pygame in Python. It allows you to play local audio files through an intuitive windowed interface, offering essential controls and a clear display of your music library and current playback status.
 
 ## Features
 
-- **Local Music Playback:** Plays audio files (e.g., MP3s) directly from your computer.
+- **Local Music Playback:** Plays audio files (e.g., MP3s, WAV, OGG) directly from your computer.
 
-- **Dynamic Console Display:** Clears and refreshes the console screen to provide a clean, updated view of the current playing status and available commands.
+- **Graphical User Interface (GUI):** All interactions and displays are handled within a dedicated Pygame window, replacing the console-based output.
+
+- **Automatic Playlist Progression:** When playing all songs, music automatically advances to the next track without manual intervention.
+
+- **Playback Progress:** Displays the elapsed time and total duration for songs when playing a playlist.
 
 - **Basic Controls:**
 
-  - Select & Play: Just type the number of the song to play it.
+  - Select & Play: Type the number of the song to play it (loops a single song).
+
+  - Play All: Plays all songs in the music_files folder sequentially.
 
   - Stop: Halts the current playback.
 
@@ -22,16 +28,18 @@ musiSc is a simple, console-based music player bot written in Python. It allows 
 
 ## Prerequisites
 
-Before running musiSc, make sure you have the following installed:
+Before running MusiSc, make sure you have the following installed:
 
 - **Python 3.x:** Download from python.org.
 
 - **Pygame:** A cross-platform set of Python modules designed for writing video games, which includes robust audio playback capabilities.
 
-You can install Pygame using pip:
+- **mutagen:** A Python module to handle audio metadata (needed for getting audio duration).
+
+You can install these libraries using pip:
 
 ```Bash
-pip install pygame
+pip install pygame mutagen
 ```
 ## Setup and Usage
 
