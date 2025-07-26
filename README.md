@@ -43,13 +43,14 @@ pip install pygame mutagen
 ```
 ## Setup and Usage
 
-1. **Save the Bot Script:**
-Save the provided Python code as music_bot.py (or any other .py filename you prefer) in a directory of your choice.
+1. **Save the Player Script:**
+Save the provided Python code as music_player.py (or any other .py filename you prefer) in a directory of your choice.
 
-2. **Prepare Your Music Files:**
-Place your MP3 (or WAV, OGG) music files in the same directory as your music_bot.py script.
+2. **Create Music Folder:**
+In the same directory where you saved music_player.py, create a new folder named music_files.
 
-- Important: By default, the bot is configured to look for Any Other Way.mp3, Never Say Die.mp3, and A Moment Apart.mp3. You can rename your files to match these, or edit the music_files dictionary in the music_bot.py script to match your actual file names.
+3. **Place Your Music Files:**
+Put your MP3 (or WAV, OGG) music files into the music_files folder. The player will automatically detect and list them.
 
 Example music_files dictionary in the code:
 
@@ -60,32 +61,24 @@ music_files = {
     "3": "Third Track.mp3"
 }
 ```
-4. **Run the Bot:**
-Open your terminal or command prompt, navigate to the directory where you saved music_bot.py and your music files, and run the script:
+4. **Run the Player:**
+Open your terminal or command prompt, navigate to the directory where you saved music_player.py, and run the script:
 
 ```Bash
-python music_bot.py
+python music_player.py
 ```
 
-5. **Interact with the Bot:**
-Follow the on-screen instructions. The bot will display a list of available songs by number and a list of commands.
+5. **Interact with the Player:**
+A Pygame window will appear. Follow the on-screen instructions displayed in the window. The player will show a list of available songs by number and a list of commands you can type into the input area at the bottom.
 
-<!-- ## Code Structure Highlights
-clear_screen() function: Handles cross-platform console clearing (cls for Windows, clear for Linux/macOS) to enable dynamic display updates.
+## Troubleshooting
 
-pygame.mixer: Utilized for robust audio loading, playing, pausing, and stopping.
+- **"Error: Music folder 'music_files' not found.":** Ensure you have created a folder named music_files in the same directory as your music_player.py script.
 
-music_files dictionary: Easily configurable to list your local music files and their corresponding selection numbers.
+- **"No music files found in 'music_files'.":** Verify that your audio files (MP3, WAV, OGG) are correctly placed inside the music_files folder.
 
-current_playing_info variable: Stores and updates the current status message (e.g., "Playing: Song Name") to be displayed persistently.
+- **No Sound:** Double-check your system's audio output. Ensure Pygame is correctly installed (pip install pygame).
 
-while True loop: The main bot loop continuously takes user input and manages command execution and display updates.
+- **Window Not Responding:** Ensure pygame.display.flip() and pygame.time.Clock().tick(30) are present within your main loop to properly handle events and manage the frame rate.
 
-Troubleshooting
-UserWarning: pkg_resources is deprecated...: This is a common warning from Pygame/Setuptools and does not affect the bot's functionality. You can safely ignore it.
-
-"File 'filename' not found." Warning: Ensure your music files are in the same directory as music_bot.py, or update the file paths in the music_files dictionary within the script to their absolute locations.
-
-No Sound: Double-check your system's audio output. Ensure Pygame is correctly installed.
-
-Enjoy your simple console music player! -->
+Enjoy your simple graphical music player!
