@@ -56,7 +56,7 @@ def music_player_gui_bot():
 
     # Set up the display
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("A simple Music Bot")
+    pygame.display.set_caption("A simple Music Player By VinLvy")
 
     # Fonts
     font_large = pygame.font.Font(None, 40) # For titles
@@ -224,7 +224,7 @@ def music_player_gui_bot():
         screen.fill(BLACK) # Clear the screen with black background
 
         # Title
-        title_text = font_large.render("musiSc", True, WHITE)
+        title_text = font_large.render("MusiSc", True, WHITE)
         screen.blit(title_text, (SCREEN_WIDTH // 2 - title_text.get_width() // 2, 20))
 
         # Music Selection header
