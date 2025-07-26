@@ -280,8 +280,8 @@ def music_player_gui_bot():
         if "Playing" in current_playing_info or "Re-looping" in current_playing_info or "Resuming" in current_playing_info:
             status_prefix = "Playing (looping):" if is_playing_looped_single else ("Playing all:" if is_playing_playlist else "Playing:")
             current_playing_info_display = f"{status_prefix} {current_display_title}"
-            # Add current time if playing
-            if pygame.mixer.music.get_busy() and current_song_duration:
+            # Add current time if playing AND not in single song looping mode
+            if pygame.mixer.music.get_busy() and current_song_duration and not is_playing_looped_single:
                 elapsed_ms = pygame.mixer.music.get_pos()
                 elapsed_seconds = elapsed_ms / 1000
                 current_time_str = format_duration(elapsed_seconds)
