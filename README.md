@@ -82,3 +82,6 @@ A Pygame window will appear. Follow the on-screen instructions displayed in the 
 - **Window Not Responding:** Ensure pygame.display.flip() and pygame.time.Clock().tick(30) are present within your main loop to properly handle events and manage the frame rate.
 
 Enjoy your simple graphical music player!
+
+License
+This project is licensed under the MIT License.
