@@ -83,5 +83,6 @@ A Pygame window will appear. Follow the on-screen instructions displayed in the 
 
 Enjoy your simple graphical music player!
 
-License
+## License
+
 This project is licensed under the MIT License.
